@@ -6,19 +6,18 @@ const defaultUserStatus = 1;
 const functions = {};
 
 async function validateEmail(email) {
-	const regex= /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	const regex= /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return regex.test(email);
 }
 
 functions.verifyEmail = async user => (
-	validateEmail(user.email) ? user : system.throwError(400, messages.validationError)
+	await validateEmail(user.email) ? user : system.throwError(400, messages.validationError)
 );
 
 async function userExists(email) {
 	const user = await manager.getUserByEmail(email);
 
-	if (user.length > 0) return false;
-	return true;
+	return user.length <= 0;
 }
 
 functions.checkIfUserExists = async user => (
@@ -27,9 +26,9 @@ functions.checkIfUserExists = async user => (
 
 async function setRandomPassword(passwordLength) {
 	const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
-	var passsword = "";
+	let passsword = '';
 
-	for (i = 0; i < passwordLength; i++) {
+	for (let i = 0; i < passwordLength; i++) {
 		passsword +=characters.charAt(Math.floor(Math.random() * characters.length));
 	}
 
@@ -49,13 +48,11 @@ functions.encryptPassword = async user => {
 async function normalizeUser(user) {
 	delete user.unencryptedPassword;
 
-	const normalized = {
+	return {
 		...user,
 		status: defaultUserStatus,
 		creationDate: mysql.now(),
-	}
-
-	return normalized;
+	};
 }
 
 async function createUser(user) {
@@ -73,14 +70,12 @@ functions.saveUser = async user => {
 }
 
 async function normalizeEmail(parameters) {
-	const normalized = {
+	return {
 		to: parameters.email,
 		subject: 'Tu registro ha sido exitoso.',
 		title: '¡Ya cuentas con una cuenta de TV PLACE!',
-		text: `Podrás  utilizar tu correo: ${ parameters.email } y contraseña: ${ parameters.unencryptedPassword } para ingresar a tu cuenta. `,
+		text: `Podrás  utilizar tu correo: ${parameters.email} y contraseña: ${parameters.unencryptedPassword} para ingresar a tu cuenta. `,
 	};
-
-	return normalized;
 }
 
 functions.notifyUser = async user => {

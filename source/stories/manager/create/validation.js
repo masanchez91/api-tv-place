@@ -1,4 +1,4 @@
-const Joi = require('@hapi/Joi');
+const Joi = require('@hapi/joi');
 const validation = {};
 
 validation.validateParameters = parameters => {

@@ -8,4 +8,10 @@ router.post(routes.create, ctx => manager.create({ ...ctx.request.body })
 	})
 );
 
+router.post(routes.login, ctx => manager.login({ ...ctx.request.body })
+	.then(data => {
+		ctx.body = data;
+	})
+);
+
 module.exports = router;

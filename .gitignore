@@ -65,3 +65,6 @@ docs
 
 # editorconfig
 .editorconfig
+
+#webStorm
+.idea/
