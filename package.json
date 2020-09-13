@@ -1,0 +1,40 @@
+{
+	"name": "api-tv-place",
+	"version": "0.1.0",
+	"description": "Proyecto para gestión del contenido de canales y películas",
+	"main": "app.js",
+	"repository": {
+		"type": "git",
+		" url": "git+https://github.com/masanchez91/api-tv-place.git"
+	},
+	"author": "Mauro Eduardo Sánchez Simental",
+	"license": "ISC",
+	"dependencies": {
+		"@hapi/joi": "^17.1.1",
+		"bcryptjs": "^2.4.3",
+		"bluebird": "^3.7.2",
+		"cryptr": "^6.0.2",
+		"dotenv": "^8.2.0",
+		"jsonwebtoken": "^8.5.1",
+		"kcors": "^2.2.2",
+		"koa": "^2.13.0",
+		"koa-better-router": "^2.1.1",
+		"koa-body": "^4.2.0",
+		"koa-helmet": "^5.2.0",
+		"koa-jwt": "^4.0.0",
+		"moment-timezone": "^0.5.31",
+		"nodemailer": "^6.4.10",
+		"promise-mysql": "^3.3.1",
+		"sql-string-escape": "^1.1.6",
+		"sqlstring": "^2.3.2"
+	},
+	"bugs": {
+		"url": "https://github.com/masanchez91/api-tv-place/issues"
+	},
+	"devDependencies": {
+		"eslint": "^7.3.1",
+		"eslint-config-airbnb-base": "^14.2.0",
+		"eslint-plugin-import": "^2.22.0"
+	},
+	"homepage": "https://github.com/masanchez91/api-tv-place#readme"
+}
