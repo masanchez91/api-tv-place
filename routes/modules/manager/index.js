@@ -14,4 +14,10 @@ router.post(routes.login, ctx => manager.login({ ...ctx.request.body })
 	})
 );
 
+router.post(routes.recoverAccount, ctx => manager.recover({ ...ctx.params, ...ctx.request.query })
+	.then(data => {
+		ctx.body = data;
+	})
+);
+
 module.exports = router;

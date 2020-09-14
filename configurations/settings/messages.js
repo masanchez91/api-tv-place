@@ -14,5 +14,6 @@ module.exports = {
         insertError: 'No pudimos registrar la información',
 		insertSuccess: 'Registro exitoso',
 		successfulRegistration: 'Tu registro fue exitoso revise su bandeja de entrada donde se enviaron sus accesos.',
+        successfulRecovery: 'Tu solicitud fue exitosa revisar su bandeja de entrada donde podrá generar una contraseña nueva',
 	},
 };
