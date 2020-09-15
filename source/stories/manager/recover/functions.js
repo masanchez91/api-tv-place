@@ -12,7 +12,7 @@ async function getUser(email) {
 }
 
 functions.getUserAccount = async user => {
-    const { email } = user;
+    const { email } = user.token || user;
     const userInformation = await getUser(email);
 
     return { ...userInformation, ...user };
@@ -27,8 +27,6 @@ functions.verifyUser = async user => {
 
 async function normalizeRecoveryParameters(user) {
     return {
-        id: user.ID_CAT_MANAGER,
-        completeName: user.name + ' ' + user.lastName,
         email: user.email,
         creationDate: mysql.now(),
     };
@@ -39,17 +37,18 @@ functions.createToken = async user => {
 
     return {
         token: jwt.sign(setRecoveryParameters, keys.jwt, { expiresIn: '1d' }),
-        user: setRecoveryParameters,
+        user,
     };
 }
 
 async function normalizeEmail(parameters) {
     const { token, user } = parameters;
+
     return {
         to: user.email,
         subject: 'Recuperación de la cuenta.',
         title: 'Tu solicitud ha sido exitosa.',
-        text: `${ user.completeName } Ingresa a la siguiente liga para generar una contraseña nueva 
+        text: `${ user.name + ' ' + user.lastName } Ingresa a la siguiente liga para generar una contraseña nueva 
             <a href="http://localhost:8080/admin/recover?token=${ token }"> Generar contraseña </a>`,
     };
 }
@@ -59,6 +58,30 @@ functions.notifyUser = async parameters => {
     await system.sendEmail(setEmailParameters);
 
     return { status: 200, message: messages.successfulRecovery };
+}
+
+functions.verifyPassword = async parameters => {
+    const { newPassword, confirmPassword } = parameters;
+
+    if (newPassword === confirmPassword) return parameters;
+    return system.throwError(400, messages.passwordsDoNotMatch);
+}
+
+functions.encryptPassword = async user => {
+    const { ID_CAT_MANAGER, newPassword } = user;
+    const password = await system.encryptPassword(newPassword);
+
+    return { ID_CAT_MANAGER, password };
+}
+
+functions.updatePassword = async  user => {
+    const userUpdated = await manager.update(user);
+
+    if (userUpdated[0].affectedRows === 1) {
+        return { status: 200, message: messages.passwordRecovered };
+    }
+
+    return system.throwError(400, messages.updateError);
 }
 
 module.exports = functions;

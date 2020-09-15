@@ -8,6 +8,7 @@ validation.validateParameters = async (parameters) => {
 			.required(),
         password: Joi.string()
             .trim()
+            .min(6)
             .max(255)
             .required(),
     });

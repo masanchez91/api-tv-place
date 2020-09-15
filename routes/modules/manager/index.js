@@ -14,7 +14,13 @@ router.post(routes.login, ctx => manager.login({ ...ctx.request.body })
 	})
 );
 
-router.post(routes.recoverAccount, ctx => manager.recover({ ...ctx.params, ...ctx.request.query })
+router.post(routes.recoverAccount, ctx => manager.recoverAccount({ ...ctx.params, ...ctx.request.query })
+	.then(data => {
+		ctx.body = data;
+	})
+);
+
+router.put(routes.recoverPassword, ctx => manager.recoverPassword({ token: ctx.state.user , ...ctx.request.body, ...ctx.request.query })
 	.then(data => {
 		ctx.body = data;
 	})
