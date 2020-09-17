@@ -5,6 +5,19 @@ const minimumPasswordLength = 6;
 const defaultUserStatus = 1;
 const functions = {};
 
+async function getUser(parameters) {
+	const user = await manager.get(parameters);
+	return user.length === 0;
+}
+
+functions.verifySecurity = async user => {
+	const { token } = user;
+	const { ID_CAT_MANAGER } = token;
+	const verifiedUser = await getUser({ ID_CAT_MANAGER, status: 1 });
+	if (!verifiedUser) return user
+	system.throwError(403, messages.noPermission)
+}
+
 async function validateEmail(email) {
 	const regex= /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return regex.test(email);
@@ -14,14 +27,8 @@ functions.verifyEmail = async user => (
 	await validateEmail(user.email) ? user : system.throwError(400, messages.validationError)
 );
 
-async function userExists(email) {
-	const user = await manager.getUserByEmail(email);
-
-	return user.length <= 0;
-}
-
 functions.checkIfUserExists = async user => (
-	await userExists(user.email) ? user : system.throwError(400, messages.userExists)
+	await getUser({ email: user.email}) ? user : system.throwError(400, messages.userExists)
 );
 
 async function setRandomPassword(passwordLength) {
@@ -46,10 +53,13 @@ functions.encryptPassword = async user => {
 }
 
 async function normalizeUser(user) {
+	const { token } = user;
 	delete user.unencryptedPassword;
+	delete user.token;
 
 	return {
 		...user,
+		creationUser: token.ID_CAT_MANAGER,
 		status: defaultUserStatus,
 		creationDate: mysql.now(),
 	};
@@ -82,7 +92,7 @@ functions.notifyUser = async user => {
 	const setEmailParameters = await normalizeEmail(user);
 	await system.sendEmail(setEmailParameters);
 
-	return { status: 200, message: messages.successfulRegistration };
+	return { status: 201, message: messages.successfulRegistration };
 }
 
 module.exports = functions;

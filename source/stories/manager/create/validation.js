@@ -3,6 +3,7 @@ const validation = {};
 
 validation.validateParameters = parameters => {
 	const schema = Joi.object().keys({
+		token: Joi.object().required(),
 		name: Joi.string()
 			.trim()
 			.min(4)

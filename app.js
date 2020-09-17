@@ -14,7 +14,6 @@ const router = Router().loadMethods();
 
 const publicRoutes = [
     /^\/managers\/login/,
-    /^\/managers\/registers/,
     /^\/managers\/recover-password/,
 ];
 

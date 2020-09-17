@@ -2,7 +2,7 @@ const router = require('koa-better-router')().loadMethods();
 const { manager } = require.main.require('./source');
 const routes = require('./routes');
 
-router.post(routes.create, ctx => manager.create({ ...ctx.request.body })
+router.post(routes.create, ctx => manager.create({ token: ctx.state.user, ...ctx.request.body })
 	.then(data => {
 		ctx.body = data;
 	})
