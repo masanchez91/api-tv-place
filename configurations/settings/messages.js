@@ -11,6 +11,7 @@ module.exports = {
         userExists: 'Este correo electrónico ya está registrado.',
         userNotExists: 'Este correo electrónico no está registrado.',
         invalidURL: 'URL caducada.',
+        invalidToken: 'URL caducado',
         insertError: 'No pudimos registrar la información',
 		insertSuccess: 'Registro exitoso',
 		successfulRegistration: 'Tu registro fue exitoso revise su bandeja de entrada donde se enviaron sus accesos.',

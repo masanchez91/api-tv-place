@@ -14,6 +14,7 @@ validation.validateParametersRecoverAccount = async (parameters) => {
 validation.validateParametersRecoverPassword = async (parameters) => {
     const schema = Joi.object().keys({
         token: Joi.object().required(),
+        id: Joi.number().min(1).required(),
         newPassword: Joi.string()
             .trim()
             .min(6)

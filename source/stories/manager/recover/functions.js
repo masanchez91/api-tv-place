@@ -27,6 +27,7 @@ functions.verifyUser = async user => {
 
 async function normalizeRecoveryParameters(user) {
     return {
+        id: user.ID_CAT_MANAGER,
         email: user.email,
         creationDate: mysql.now(),
     };
@@ -58,6 +59,17 @@ functions.notifyUser = async parameters => {
     await system.sendEmail(setEmailParameters);
 
     return { status: 200, message: messages.successfulRecovery };
+}
+
+functions.verifyTokenSecurity = async parameters => {
+    const { ID_CAT_MANAGER, id, token } = parameters;
+    const { exp } = token;
+
+    const validity = new Date() < new Date(exp * 1000);
+    const verifiedUser = ID_CAT_MANAGER === id;
+
+    if (validity && verifiedUser) return parameters;
+    return system.throwError(400, messages.invalidToken);
 }
 
 functions.verifyPassword = async parameters => {

@@ -1,10 +1,10 @@
 module.exports = {
-	create: '/admin/sign-in',
-	login: '/admin/login',
-	recoverAccount: '/admin/recover-account/:email',
-	recoverPassword: '/manager/recover-password',
-	update: '/manager/update/:id',
-	delete: '/manager/delete/:id',
-	read: '/managers',
-	detail: '/manager/:id',
+	create: '/managers/registers',
+	login: '/managers/login',
+	recoverPassword: '/managers/recover-password/:email',
+	resetPassword: '/managers/:id/reset-password',
+	update: '/managers/:id',
+	delete: '/managers/:id',
+	readOne: '/managers/:id',
+	readAll: '/managers',
 };
