@@ -22,7 +22,7 @@ functions.verifyUser = async user => {
     const { status, email } = user;
 
     if (status === 1) return user;
-    return system.throwError(400, messages.noPermission, { email });
+    return system.throwError(403, messages.noPermission, { email });
 }
 
 async function normalizeRecoveryParameters(user) {
@@ -93,7 +93,7 @@ functions.updatePassword = async  user => {
         return { status: 200, message: messages.passwordRecovered };
     }
 
-    return system.throwError(400, messages.updateError);
+    return system.throwError(403, messages.updateError);
 }
 
 module.exports = functions;

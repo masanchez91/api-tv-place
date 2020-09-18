@@ -21,7 +21,7 @@ functions.getUserAccount = async user => {
 functions.verifyUser = async user => {
 	const { status, email } = user;
     if (status === 1) return user;
-    return system.throwError(400, messages.noPermission, { email });
+    return system.throwError(403, messages.noPermission, { email });
 }
 
 functions.verifyPassword = async user => {
