@@ -18,5 +18,6 @@ module.exports = {
         successfulRecovery: 'Tu solicitud fue exitosa revisar su bandeja de entrada donde podrá generar una contraseña nueva',
         passwordsDoNotMatch: 'Las contraseñas no coinciden',
         passwordRecovered: 'El cambio de contraseña fue exitoso ya puedes ingresar con tu cuenta.',
+        updateSuccess: 'Actualización exitosa.'
     },
 };

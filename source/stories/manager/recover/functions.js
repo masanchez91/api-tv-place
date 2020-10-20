@@ -4,7 +4,7 @@ const { manager, mysql } = require.main.require('./database');
 const system = require('../../system');
 const functions = {};
 
-async function getUser(email) {
+async function getUser(email = '') {
     const user = await manager.getUserByEmail(email);
 
     if (user.length > 0) return { ...user[0] };
@@ -25,7 +25,7 @@ functions.verifyUser = async user => {
     return system.throwError(403, messages.noPermission, { email });
 }
 
-async function normalizeRecoveryParameters(user) {
+async function normalizeRecoveryParameters(user = {}) {
     return {
         id: user.ID_CAT_MANAGER,
         email: user.email,
@@ -42,7 +42,7 @@ functions.createToken = async user => {
     };
 }
 
-async function normalizeEmail(parameters) {
+async function normalizeEmail(parameters = {}) {
     const { token, user } = parameters;
 
     return {

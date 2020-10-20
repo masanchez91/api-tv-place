@@ -5,20 +5,21 @@ const minimumPasswordLength = 6;
 const defaultUserStatus = 1;
 const functions = {};
 
-async function getUser(parameters) {
+async function getUser(parameters = {}) {
 	const user = await manager.get(parameters);
 	return user.length === 0;
 }
 
 functions.verifySecurity = async user => {
+	const ACTIVE = 1;
 	const { token } = user;
 	const { ID_CAT_MANAGER } = token;
-	const verifiedUser = await getUser({ ID_CAT_MANAGER, status: 1 });
+	const verifiedUser = await getUser({ ID_CAT_MANAGER, status: ACTIVE });
 	if (!verifiedUser) return user
 	system.throwError(403, messages.noPermission)
 }
 
-async function validateEmail(email) {
+async function validateEmail(email = '') {
 	const regex= /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return regex.test(email);
 }
@@ -31,7 +32,7 @@ functions.checkIfUserExists = async user => (
 	await getUser({ email: user.email}) ? user : system.throwError(400, messages.userExists)
 );
 
-async function setRandomPassword(passwordLength) {
+async function setRandomPassword(passwordLength = minimumPasswordLength) {
 	const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
 	let passsword = '';
 
@@ -52,7 +53,7 @@ functions.encryptPassword = async user => {
 	return { ...user, password} ;
 }
 
-async function normalizeUser(user) {
+async function normalizeUser(user = {}) {
 	const { token } = user;
 	delete user.unencryptedPassword;
 	delete user.token;
@@ -65,21 +66,20 @@ async function normalizeUser(user) {
 	};
 }
 
-async function createUser(user) {
+async function createUser(user = {}) {
 	const registeredUser = await manager.insert(user);
 	return registeredUser.insertId;
 }
 
 functions.saveUser = async user => {
 	const { unencryptedPassword } = user;
-
 	const setUserParameters = await normalizeUser(user);
 	const userId = await createUser(setUserParameters);
 
 	return { ...user, unencryptedPassword, userId };
 }
 
-async function normalizeEmail(parameters) {
+async function normalizeEmail(parameters = {}) {
 	return {
 		to: parameters.email,
 		subject: 'Tu registro ha sido exitoso.',

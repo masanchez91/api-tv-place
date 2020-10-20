@@ -4,7 +4,7 @@ const { manager } = require.main.require('./database');
 const system = require('../../system');
 const functions = {};
 
-async function getUser(email) {
+async function getUser(email = '') {
 	const user = await manager.getUserByEmail(email);
 
 	if (user.length > 0) return { ...user[0] };
