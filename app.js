@@ -13,7 +13,8 @@ const app = new Koa();
 const router = Router().loadMethods();
 
 const publicRoutes = [
-    /^\/admin/,
+    /^\/managers\/login/,
+    /^\/managers\/recover-password/,
 ];
 
 const formatError = (error) => {

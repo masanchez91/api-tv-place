@@ -4,7 +4,7 @@ const { manager } = require.main.require('./database');
 const system = require('../../system');
 const functions = {};
 
-async function getUser(email) {
+async function getUser(email = '') {
 	const user = await manager.getUserByEmail(email);
 
 	if (user.length > 0) return { ...user[0] };
@@ -21,7 +21,7 @@ functions.getUserAccount = async user => {
 functions.verifyUser = async user => {
 	const { status, email } = user;
     if (status === 1) return user;
-    return system.throwError(400, messages.noPermission, { email });
+    return system.throwError(403, messages.noPermission, { email });
 }
 
 functions.verifyPassword = async user => {

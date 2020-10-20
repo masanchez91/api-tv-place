@@ -4,6 +4,7 @@ const system = require('../../system');
 
 const create = parameters => system.startPromiseChain(parameters)
 	.then(validation.validateParameters)
+	.then(functions.verifySecurity)
 	.then(functions.verifyEmail)
 	.then(functions.checkIfUserExists)
 	.then(functions.generatePassword)
